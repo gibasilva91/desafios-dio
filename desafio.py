@@ -12,47 +12,62 @@ limite = 500
 extrato = ""
 numero_de_saques = 0
 LIMITE_DE_SAQUES = 3
+clientes = []
+
+def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
+    if numero_saques < limite_saques:
+        if valor > saldo:
+            print("Saque não pode ser realizado pois o valor a ser sacado é maior do que o saldo")
+        else:
+            if valor > limite:
+                print("Saque não pode ser realizado pois o valor do saque é maior do que o limite de saque")
+            else:
+                if valor > 0:
+                    saldo -= valor
+                    numero_saques += 1
+                    extrato += f"Saque de R$ {valor:.2f}\n"
+                    print("Saque realizado com sucesso")
+                else:
+                    print("O valor de saque informado não é válido")
+    else:
+        print("Saque não pode ser realizado pois já foram feitos os 3 saques diários")
+
+    return saldo, extrato
+
+def depositar(saldo, valor, extrato):
+    if valor <= 0:
+        print("O valor de depósito tem que ser maior do que 0")
+    else:
+        saldo += valor
+        extrato += f"Depósito de R$ {valor:.2f}\n"
+        print("Depósito realizado com sucesso")
+
+    return saldo, extrato
+
+def exibir_extrato(saldo, *, extrato):
+    print("Extrato")
+    print("Não foram realizadas movimentações" if not extrato else extrato)
+    print(f"Saldo: R$ {saldo:.2f}\n")
+
+def criar_cliente(nome, data_de_nascimento, cpf, endereco):
+    cliente = []
+    cliente.append(nome)
+    return 0
 
 while True:
     
     opcao = input(menu)
 
     if opcao == "d":
-        print("Depósito")
-
         valor_deposito = float(input("Valor a depositar: "))
-        if valor_deposito <= 0:
-            print("O valor de depósito tem que ser maior do que 0")
-        else:
-            saldo += valor_deposito
-            extrato += f"Depósito de R$ {valor_deposito:.2f}\n"
-            print("Depósito realizado com sucesso")
+        saldo, extrato = depositar(saldo, valor_deposito, extrato)
 
     elif opcao == "s":
-        print("Saque")
-
-        if numero_de_saques < LIMITE_DE_SAQUES:
-            valor_saque = float(input("Valor a ser sacado: "))
-            if valor_saque > saldo:
-                print("Saque não pode ser realizado pois o valor a ser sacado é maior do que o saldo")
-            else:
-                if valor_saque > 500:
-                    print("Saque não pode ser realizado pois o valor do saque é maior do que o limite de saque")
-                else:
-                    if valor_saque > 0:
-                        saldo -= valor_saque
-                        numero_de_saques += 1
-                        extrato += f"Saque de R$ {valor_saque:.2f}\n"
-                        print("Saque realizado com sucesso")
-                    else:
-                        print("O valor de saque informado não é válido")
-        else:
-            print("Saque não pode ser realizado pois já foram feitos os 3 saques diários")
+        valor = float(input("Valor a ser sacado: "))
+        saldo, extrato = sacar(saldo=saldo, valor=valor, extrato=extrato, limite=limite, numero_saques=numero_de_saques, limite_saques=LIMITE_DE_SAQUES)
     
     elif opcao == "e":
-        print("Extrato")
-        print("Não foram realizadas movimentações" if not extrato else extrato)
-        print(f"Saldo: R$ {saldo:.2f}\n")
+        exibir_extrato(saldo, extrato=extrato)
     
     elif opcao == "q":
         break
