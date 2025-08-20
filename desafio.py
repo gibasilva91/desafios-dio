@@ -1,5 +1,7 @@
 menu = """
 
+[c] - Cadastrar cliente
+[l] - Listar clientes
 [d] - Depositar
 [s] - Sacar
 [e] - Extrato
@@ -50,15 +52,39 @@ def exibir_extrato(saldo, *, extrato):
     print(f"Saldo: R$ {saldo:.2f}\n")
 
 def criar_cliente(nome, data_de_nascimento, cpf, endereco):
-    cliente = []
-    cliente.append(nome)
-    return 0
+
+    cliente = {"nome": nome, "data_de_nascimento": data_de_nascimento, "cpf": cpf, "endereco": endereco}
+
+    cliente_ja_existe = 0
+
+    for cliente_existente in clientes:
+        if cliente_existente['cpf'] == cpf:
+            cliente_ja_existe += 1
+            break
+    
+    if cliente_ja_existe == 1:
+        print("Já existe um cliente cadastrado com esse CPF.")
+    else:
+        return clientes.append(cliente)
 
 while True:
     
     opcao = input(menu)
 
-    if opcao == "d":
+    if opcao == "c":
+
+        nome = input("Nome do cliente: ")
+        data_de_nascimento = input("Data de nascimento: ")
+        cpf = input("CPF: ")
+        endereco = input("Endereço: ")
+
+        criar_cliente(nome, data_de_nascimento, cpf, endereco)
+    
+    elif opcao == "l":
+        for cliente in clientes:
+            print(cliente)
+
+    elif opcao == "d":
         valor_deposito = float(input("Valor a depositar: "))
         saldo, extrato = depositar(saldo, valor_deposito, extrato)
 
