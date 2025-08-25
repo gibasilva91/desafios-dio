@@ -2,6 +2,8 @@ menu = """
 
 [c] - Cadastrar cliente
 [l] - Listar clientes
+[cc] - Criar conta
+[lc] - Listar contas
 [d] - Depositar
 [s] - Sacar
 [e] - Extrato
@@ -15,6 +17,9 @@ extrato = ""
 numero_de_saques = 0
 LIMITE_DE_SAQUES = 3
 clientes = []
+contas = []
+sequencia_conta = 1
+NUMERO_DA_AGENCIA = "0001"
 
 def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
     if numero_saques < limite_saques:
@@ -65,14 +70,34 @@ def criar_cliente(nome, data_de_nascimento, cpf, endereco):
     if cliente_ja_existe == 1:
         print("Já existe um cliente cadastrado com esse CPF.")
     else:
+        print("Cliente criado com sucesso")
         return clientes.append(cliente)
+
+def criar_conta(agencia, numero_da_conta, cpf_do_cliente):
+    
+    global sequencia_conta
+
+    conta = {"agencia": agencia, "numero_da_conta": numero_da_conta, "cpf_do_cliente": cpf_do_cliente}
+
+    cpf_ja_existe = 0
+
+    for cpf_existente in clientes:
+        if cpf_existente['cpf'] == cpf_do_cliente:
+            cpf_ja_existe += 1
+            break
+
+    if cpf_ja_existe == 1:  
+        sequencia_conta += 1
+        print("Conta criada com sucesso")
+        return contas.append(conta)
+    else:
+        print("Não existe nenhum cliente para o CPF informado")
 
 while True:
     
     opcao = input(menu)
 
     if opcao == "c":
-
         nome = input("Nome do cliente: ")
         data_de_nascimento = input("Data de nascimento: ")
         cpf = input("CPF: ")
@@ -81,8 +106,22 @@ while True:
         criar_cliente(nome, data_de_nascimento, cpf, endereco)
     
     elif opcao == "l":
-        for cliente in clientes:
-            print(cliente)
+        if not clientes:
+            print("Ainda não existem clientes cadastrados")
+        else:
+            for cliente in clientes:
+                print(cliente)
+
+    elif opcao == "cc":
+        cpf = input("Digite o CPF do cliente o qual deseja criar a conta: ")
+        criar_conta(NUMERO_DA_AGENCIA, sequencia_conta, cpf)
+
+    elif opcao == "lc":
+        if not contas:
+            print("Ainda não existem contas cadastradas")
+        else:
+            for conta in contas:
+                print(conta)
 
     elif opcao == "d":
         valor_deposito = float(input("Valor a depositar: "))
