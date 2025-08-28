@@ -1,3 +1,13 @@
+saldo = 0
+limite = 500
+extrato = ""
+numero_de_saques = 0
+LIMITE_DE_SAQUES = 3
+clientes = []
+contas = []
+sequencia_conta = 1
+NUMERO_DA_AGENCIA = "0001"
+
 def menu():
     opcao = input(
     """
@@ -12,16 +22,6 @@ def menu():
     => """)
 
     return opcao
-
-saldo = 0
-limite = 500
-extrato = ""
-numero_de_saques = 0
-LIMITE_DE_SAQUES = 3
-clientes = []
-contas = []
-sequencia_conta = 1
-NUMERO_DA_AGENCIA = "0001"
 
 def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
     if numero_saques < limite_saques:
@@ -95,49 +95,53 @@ def criar_conta(agencia, numero_da_conta, cpf_do_cliente):
     else:
         print("Não existe nenhum cliente para o CPF informado")
 
-while True:
-    
-    opcao = menu()
+def main():
 
-    if opcao == "c":
-        nome = input("Nome do cliente: ")
-        data_de_nascimento = input("Data de nascimento: ")
-        cpf = input("CPF: ")
-        endereco = input("Endereço: ")
+    while True:
+        
+        opcao = menu()
 
-        criar_cliente(nome, data_de_nascimento, cpf, endereco)
-    
-    elif opcao == "l":
-        if not clientes:
-            print("Ainda não existem clientes cadastrados")
+        if opcao == "c":
+            nome = input("Nome do cliente: ")
+            data_de_nascimento = input("Data de nascimento: ")
+            cpf = input("CPF: ")
+            endereco = input("Endereço: ")
+
+            criar_cliente(nome, data_de_nascimento, cpf, endereco)
+        
+        elif opcao == "l":
+            if not clientes:
+                print("Ainda não existem clientes cadastrados")
+            else:
+                for cliente in clientes:
+                    print(cliente)
+
+        elif opcao == "cc":
+            cpf = input("Digite o CPF do cliente o qual deseja criar a conta: ")
+            criar_conta(NUMERO_DA_AGENCIA, sequencia_conta, cpf)
+
+        elif opcao == "lc":
+            if not contas:
+                print("Ainda não existem contas cadastradas")
+            else:
+                for conta in contas:
+                    print(conta)
+
+        elif opcao == "d":
+            valor_deposito = float(input("Valor a depositar: "))
+            saldo, extrato = depositar(saldo, valor_deposito, extrato)
+
+        elif opcao == "s":
+            valor = float(input("Valor a ser sacado: "))
+            saldo, extrato = sacar(saldo=saldo, valor=valor, extrato=extrato, limite=limite, numero_saques=numero_de_saques, limite_saques=LIMITE_DE_SAQUES)
+        
+        elif opcao == "e":
+            exibir_extrato(saldo, extrato=extrato)
+        
+        elif opcao == "q":
+            break
+
         else:
-            for cliente in clientes:
-                print(cliente)
+            print("Operação inválida. Por favor selecione novamente uma opção")
 
-    elif opcao == "cc":
-        cpf = input("Digite o CPF do cliente o qual deseja criar a conta: ")
-        criar_conta(NUMERO_DA_AGENCIA, sequencia_conta, cpf)
-
-    elif opcao == "lc":
-        if not contas:
-            print("Ainda não existem contas cadastradas")
-        else:
-            for conta in contas:
-                print(conta)
-
-    elif opcao == "d":
-        valor_deposito = float(input("Valor a depositar: "))
-        saldo, extrato = depositar(saldo, valor_deposito, extrato)
-
-    elif opcao == "s":
-        valor = float(input("Valor a ser sacado: "))
-        saldo, extrato = sacar(saldo=saldo, valor=valor, extrato=extrato, limite=limite, numero_saques=numero_de_saques, limite_saques=LIMITE_DE_SAQUES)
-    
-    elif opcao == "e":
-        exibir_extrato(saldo, extrato=extrato)
-    
-    elif opcao == "q":
-        break
-
-    else:
-        print("Operação inválida. Por favor selecione novamente uma opção")
+main()
