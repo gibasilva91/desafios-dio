@@ -1,15 +1,17 @@
-menu = """
+def menu():
+    opcao = input(
+    """
+    [c] - Cadastrar cliente
+    [l] - Listar clientes
+    [cc] - Criar conta
+    [lc] - Listar contas
+    [d] - Depositar
+    [s] - Sacar
+    [e] - Extrato
+    [q] - Sair
+    => """)
 
-[c] - Cadastrar cliente
-[l] - Listar clientes
-[cc] - Criar conta
-[lc] - Listar contas
-[d] - Depositar
-[s] - Sacar
-[e] - Extrato
-[q] - Sair
-
-=> """
+    return opcao
 
 saldo = 0
 limite = 500
@@ -95,7 +97,7 @@ def criar_conta(agencia, numero_da_conta, cpf_do_cliente):
 
 while True:
     
-    opcao = input(menu)
+    opcao = menu()
 
     if opcao == "c":
         nome = input("Nome do cliente: ")
